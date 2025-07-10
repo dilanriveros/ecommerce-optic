@@ -11,6 +11,7 @@ import ToggleTheme from "./toggle-theme";
 
 import { BaggageClaim, Heart, ShoppingCart, User } from "lucide-react";
 import { useCart } from "../../hooks/use-cart";
+import { useLovedProducts } from "../../hooks/use-loved-products";
 
 const Navbar = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const Navbar = () => {
     setMounted(true);
   }, []);
   const cart = useCart()
+  const {lovedItems} = useLovedProducts()
   return (
     <header className="w-full bg-background sticky top-0 z-50 border-b shadow-sm">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 relative">
@@ -74,7 +76,7 @@ const Navbar = () => {
           
           <Heart
             strokeWidth="1"
-            className="h-6 w-6 cursor-pointer"
+            className={`h-6 w-6 cursor-pointer ${lovedItems.length > 0  && 'fill-black dark:fill-white'}`}
             onClick={() => router.push("/loved-products")}
           />
           <User

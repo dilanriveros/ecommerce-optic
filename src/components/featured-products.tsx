@@ -41,14 +41,19 @@ const FeaturedProducts = () => {
                   <Card className="py-4 border-gray-200 shadow-none transition-shadow duration-300 group-hover:shadow-md">
                     <CardContent className="relative flex items-center justify-center px-6 py-2">
                       {imageUrl ? (
-                        <img
-                          src={imageUrl}
-                          alt={productName || "Producto destacado"}
-                          className="w-full h-64 object-contain"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none';
-                          }}
-                        />
+                        <div
+                          className="cursor-pointer w-full h-64"
+                          onClick={() => router.push(`product/${slug}`)}
+                                                  >
+                          <img
+                            src={imageUrl}
+                            alt={productName || "Producto destacado"}
+                            className="w-full h-64 object-contain"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                            }}
+                          />
+                        </div>
                       ) : (
                         <div className="w-full h-64 flex items-center justify-center bg-gray-100">
                           <span className="text-gray-500">Imagen no disponible</span>

@@ -12,7 +12,7 @@ export default function Page() {
     const totalPrice = prices.reduce((total, pice) => total + pice, 0)
     return(
         <div className="max-w-6xl px-4 py-16 mx-auto sm:px-6 lg:px-8">
-            <h1 className="mb-5 text-3xl font-bold">Shopping cart</h1>
+            <h1 className="mb-5 text-3xl font-bold">Carrito de Compras</h1>
             <div className="grid sm:grid-cols-2 sm:gap-5">
                 <div>
                     {items.length == 0 && (
@@ -25,7 +25,7 @@ export default function Page() {
                     </ul>
                 </div>
                 <div className="max-w-xl">
-                    <div className="p-6 rounded-lg bg-slate-100">
+                    <div className="p-6 rounded-lg bg-slate-100  dark:bg-neutral-700 text-black dark:text-neutral-100">
                         <p className="mb-3 text-lg font-semibold">Resumen del pedido</p>
                         <Separator/>
                         <div className="flex justify-between gap-5 my-4">
