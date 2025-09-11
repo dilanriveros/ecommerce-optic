@@ -23,13 +23,14 @@ const Navbar = () => {
   }, []);
   const cart = useCart()
   const {lovedItems} = useLovedProducts()
+  
   return (
     <header className="w-full bg-background sticky top-0 z-50 border-b shadow-sm">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 relative">
-        {/* LOGO */}
+      <div className="mx-auto flex h-12 sm:h-14 max-w-6xl items-center justify-between px-4 sm:px-6 relative">
+        {/* LOGO - Ajustado para alinearse más a la izquierda */}
         <button
           onClick={() => router.push("/")}
-          className="flex-shrink-0 outline-none"
+          className="flex-shrink-0 outline-none -ml-2 sm:ml-0"
         >
           <Image
             src={
@@ -40,15 +41,15 @@ const Navbar = () => {
             alt="Óptica Mirada Brillante"
             width={220}
             height={60}
-            className="h-14 w-auto object-contain"
+            className="h-10 sm:h-12 w-auto object-contain"
             priority
           />
         </button>
 
-        {/* FALSO ESPACIO IZQUIERDO EN MOBILE (para balancear la hamburguesa) */}
-        <div className="sm:hidden w-[128px]" />
+        {/* FALSO ESPACIO IZQUIERDO EN MOBILE */}
+        <div className="sm:hidden w-[28px]" />
 
-        {/* MENÚ HAMBURGUESA - Centrado SOLO en mobile */}
+        {/* MENÚ HAMBURGUESA */}
         <div className="sm:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <ItemsMenuMobile />
         </div>
@@ -58,20 +59,19 @@ const Navbar = () => {
           <MenuList />
         </div>
 
-        {/* ICONOS DERECHA */}
-        <div className="flex items-center gap-3 sm:gap-4 pl-4">
+        {/* ICONOS DERECHA - Tamaño original en móvil */}
+        <div className="flex items-center gap-3 sm:gap-4 pl-2 sm:pl-4">
             {cart.items.length == 0 ? 
             <ShoppingCart
             strokeWidth="1"
-            className="h-6 w-6 cursor-pointer"
+            className="h-6 w-6 cursor-pointer" // Tamaño original
             onClick={() => router.push("/cart")}
           />
             : (
-              <div className="flex gap-1" onClick={() => router.push("/cart")}>
-                  <BaggageClaim strokeWidth={1} className="cursor-pointer"/>
-                  <span>{cart.items.length}</span>
+              <div className="flex gap-1 items-center" onClick={() => router.push("/cart")}>
+                  <BaggageClaim strokeWidth={1} className="h-6 w-6 cursor-pointer"/>
+                  <span className="text-sm sm:text-base">{cart.items.length}</span>
               </div>
-
             )}
           
           <Heart

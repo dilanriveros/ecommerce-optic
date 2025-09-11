@@ -30,7 +30,12 @@ const CartItem = (props: CartItemProps) => {
                             {product.style}
                         </p>*/}
                         
-                        <p className="px-2 py-1 text-white bg-yellow-900 rounded-full w-fit">{product.style}</p>
+                        {product.category?.categoryName?.toLowerCase() !== "accesorios" && (
+                        <p className="px-2 py-1 text-white bg-yellow-900 rounded-full w-fit">
+                            {product.style}
+                        </p>
+                        )}
+
 
                     </div>
                 </div>

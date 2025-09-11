@@ -15,8 +15,8 @@ import {
 
 const components: { title: string; href: string; description: string }[] = [
   {
-    title: "Armazones",
-    href: "/category/armazones",
+    title: "Monturas",
+    href: "/category/monturas",
     description:
       "Variedad de estilos y materiales en armazones para todos los gustos y necesidades.",
   },
@@ -28,7 +28,7 @@ const components: { title: string; href: string; description: string }[] = [
   },
   {
     title: "Gafas de sol",
-    href: "/category/gafas-de-sol",
+    href: "/category/gafas",
     description:
       "Protección UV con estilo. Encuentra gafas de sol con y sin graduación.",
   },
@@ -49,18 +49,18 @@ const MenuList = () => (
                   href="/"
                   className="flex h-full w-full flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none select-none focus:shadow-md"
                 >
-                  <div className="mt-4 mb-2 text-lg font-medium">TarreDev</div>
+                  <div className="mt-4 mb-2 text-lg font-medium">Mirada Brillante</div>
                   <p className="text-muted-foreground text-sm leading-tight">
                     Más que gafas, una experiencia visual. Entra y deslúmbrate.
                   </p>
                 </Link>
               </NavigationMenuLink>
             </li>
-            <ListItem href="/shop" title="Tienda">
+            <ListItem href="/" title="Tienda">
               Accede a toda tu información, tus pedidos y mucho más.
             </ListItem>
-            <ListItem href="/offers" title="Ofertas">
-              Sección dedicada a promociones y descuentos especiales
+            <ListItem href="/cart" title="Carrito">
+              Productos agregados al carrito.
             </ListItem>
             <ListItem href="/accesorios" title="Accesorios">
               Productos complementarios como gotas, limpiador de lentes, paños,

@@ -15,36 +15,37 @@ const ChooseCategory = () => {
       <div className="grid gap-5 sm:grid-cols-3">
         {!loading &&
           Array.isArray(result) &&
-          (result as CategoryType[]).map((category) => {
-            const imageUrl = category?.mainImage?.url
-              ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${category.mainImage.url}`
-              : "/placeholder-category.jpg";
+          (result as CategoryType[])
+            .filter((category) => category.categoryName.toLowerCase() !== "accesorios")
+            .map((category) => {
+              const imageUrl = category?.mainImage?.url
+                ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${category.mainImage.url}`
+                : "/placeholder-category.jpg";
 
-            return (
-              <Link
-                key={category.id}
-                href={`/category/${category.slug}`}
-                className="relative mx-auto w-full max-w-[280px] h-[340px] sm:h-[400px] overflow-hidden rounded-lg bg-no-repeat bg-cover"
-              >
-                <img
-                  src={imageUrl}
-                  alt={category.categoryName}
-                  className="w-full h-full object-cover transition duration-300 ease-in-out hover:scale-110 rounded-lg"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "/placeholder-category.jpg";
-                  }}
-                />
-                <p className="absolute w-full py-2 text-lg font-bold text-center text-white bottom-5 backdrop-blur-lg">
-                  {category.categoryName}
-                </p>
-              </Link>
-            );
-          })}
+              return (
+                <Link
+                  key={category.id}
+                  href={`/category/${category.slug}`}
+                  className="relative mx-auto w-full max-w-[280px] h-[340px] sm:h-[400px] overflow-hidden rounded-lg bg-no-repeat bg-cover"
+                >
+                  <img
+                    src={imageUrl}
+                    alt={category.categoryName}
+                    className="w-full h-full object-cover transition duration-300 ease-in-out hover:scale-110 rounded-lg"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        "/placeholder-category.jpg";
+                    }}
+                  />
+                  <p className="absolute w-full py-2 text-lg font-bold text-center text-white bottom-5 backdrop-blur-lg">
+                    {category.categoryName}
+                  </p>
+                </Link>
+              );
+            })}
       </div>
     </div>
   );
 };
 
 export default ChooseCategory;
-
