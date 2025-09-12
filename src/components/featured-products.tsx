@@ -18,9 +18,10 @@ const FeaturedProducts = () => {
   const router = useRouter();
   const { loading, result }: ResponseType = useGetFeaturedProducts();
   const {addItem} = useCart()
-  
+
   
   return (
+    
     <div className="max-w-6xl py-4 mx-auto sm:py-16 sm:px-24">
       <h3 className="px-6 text-3xl sm:pb-8">Productos destacados</h3>
       <Carousel>
@@ -78,7 +79,9 @@ const FeaturedProducts = () => {
 
                     <div className="flex justify-between gap-4 px-8">
                       <h3 className="text-lg font-bold">{productName}</h3>
+                      
                       <div className="flex items-center justify-between gap-3">
+                        
                         {style && (
                           <p className="px-2 py-1 text-white bg-black rounded-full dark:bg-white dark:text-black w-fit">
                             {style}
@@ -96,6 +99,7 @@ const FeaturedProducts = () => {
               </CarouselItem>
             );
           })}
+          
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext className="hidden sm:flex" />

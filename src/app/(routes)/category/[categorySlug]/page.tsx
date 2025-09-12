@@ -9,6 +9,7 @@ import SkeletonSchema from "@/components/skeletonSchema";
 import ProductCard from "./components/product-card";
 import { ProductType } from "../../../../../types/product";
 import { useState } from "react";
+import ContactarFormula from "@/components/formula";
 
 export default function Page() {
   const params = useParams();
@@ -30,6 +31,14 @@ export default function Page() {
           {result[0]?.category.categoryName}
         </h1>
       )}
+      {result != null && !loading && (
+  <>
+   
+     <div className="flex justify-center mt-4 mb-6">
+           <ContactarFormula category={result[0]?.category} />
+     </div>
+       </>
+)}
       <Separator />
       <div className="sm:flex sm:justify-between">
         <FiltersControlsCategory setFilterStyle={setFilterStyle} />
