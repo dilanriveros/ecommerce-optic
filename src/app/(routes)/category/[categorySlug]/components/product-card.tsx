@@ -25,9 +25,9 @@ const ProductCard = (props: ProductCardProps) => {
     >
       {product.style &&
         (typeof product.category === "string"
-          ? product.category
-          : product.category?.name ?? product.category?.slug ?? "") !==
-          "lentes-de-contacto" && (
+  ? product.category
+  : product.category?.categoryName ?? product.category?.slug ?? "") !==
+  "lentes-de-contacto" && (
           <div className="absolute flex items-center justify-between gap-3 px-2 z-[1] top-4">
             <p className="px-2 py-1 text-xs text-white bg-black rounded-full dark:bg-white dark:text-black w-fit">
               {product.style}
