@@ -1,3 +1,4 @@
+// types/product.ts
 export type ProductType = {
   id: number;
   productName: string;
@@ -8,20 +9,17 @@ export type ProductType = {
   style: string;
   price: number;
 
-  /** Strapi lo duplica; úsalo si quieres */
   categoryName: string;
 
-  /** Ya NO hay “data” */
   category: {
     id: number;
     categoryName: string;
     slug: string;
   };
 
-  /** Aquí sí es un array, sin “attributes” */
   images: {
     id: number;
-    url: string;          // o “name”, “formats”… según tu modelo
+    url: string;          
     alternativeText: string | null;
     caption: string | null;
   }[];

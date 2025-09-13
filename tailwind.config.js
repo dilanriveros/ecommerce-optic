@@ -13,56 +13,42 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: "class",
+  darkMode: "class",  // Permite el modo oscuro basado en la clase
   theme: {
     extend: {
       colors: {
-        border: withOpacityValue("--border"),
-        input: withOpacityValue("--input"),
-        ring: withOpacityValue("--ring"),
-        background: withOpacityValue("--background"),
-        foreground: withOpacityValue("--foreground"),
+        border: "hsl(var(--border))",   // Uso directo de la variable
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: withOpacityValue("--primary"),
-          foreground: withOpacityValue("--primary-foreground"),
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: withOpacityValue("--secondary"),
-          foreground: withOpacityValue("--secondary-foreground"),
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
-          DEFAULT: withOpacityValue("--destructive"),
-          foreground: withOpacityValue("--destructive-foreground"),
+          DEFAULT: "hsl(var(--destructive))",
         },
         muted: {
-          DEFAULT: withOpacityValue("--muted"),
-          foreground: withOpacityValue("--muted-foreground"),
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: withOpacityValue("--accent"),
-          foreground: withOpacityValue("--accent-foreground"),
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
-          DEFAULT: withOpacityValue("--popover"),
-          foreground: withOpacityValue("--popover-foreground"),
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
         },
         card: {
-          DEFAULT: withOpacityValue("--card"),
-          foreground: withOpacityValue("--card-foreground"),
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
-        gray: {
-          50: 'hsl(0, 0%, 98%)',
-          100: 'hsl(240, 5%, 96%)',
-          200: 'hsl(240, 6%, 90%)',
-          300: 'hsl(240, 5%, 84%)',
-          400: 'hsl(240, 5%, 65%)',
-          500: 'hsl(240, 4%, 46%)',
-          600: 'hsl(240, 5%, 34%)',
-          700: 'hsl(240, 5%, 26%)',
-          800: 'hsl(240, 4%, 16%)',
-          900: 'hsl(240, 6%, 10%)',
-          950: 'hsl(240, 10%, 4%)',
-        }
       },
       borderRadius: {
         lg: "var(--radius)",

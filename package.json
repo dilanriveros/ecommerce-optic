@@ -1,4 +1,5 @@
 {
+  "type": "commonjs",
   "name": "frontend-optica",
   "version": "0.1.0",
   "private": true,
@@ -18,14 +19,14 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-toast": "^1.2.14",
+    "@tailwindcss/postcss": "^4.1.13",
     "axios": "^1.10.0",
     "class-variance-authority": "^0.7.1",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
-    "eslint": "^8.57.1",
     "lucide": "^0.525.0",
     "lucide-react": "^0.525.0",
-    "next": "^15.3.3",
+    "next": "^15.5.3",
     "next-themes": "^0.4.6",
     "nextjs-toploader": "^3.8.16",
     "react": "^18.2.0",
@@ -34,16 +35,18 @@
     "zustand": "^5.0.6"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/node": "^20.19.14",
+    "@types/react": "^18.3.24",
     "@types/react-dom": "^18",
-    "@typescript-eslint/eslint-plugin": "^7.8.0",
-    "@typescript-eslint/parser": "^7.8.0",
+    "@typescript-eslint/eslint-plugin": "^8.43.0",
+    "@typescript-eslint/parser": "^8.43.0",
     "autoprefixer": "^10.4.16",
-    "eslint-config-next": "15.3.3",
+    "eslint": "^9.35.0",
+    "eslint-config-next": "^15.5.3",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-define-config": "^2.1.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5.9.2"
   }
 }

@@ -4,6 +4,6 @@ export function formatPrice(price: number) {
     currency: 'COP',
     minimumFractionDigits: 0,
   }).format(price);
-  const finalPrice = formatPrice
+
   return priceFormatted;
 }

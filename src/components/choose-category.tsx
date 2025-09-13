@@ -32,10 +32,7 @@ const ChooseCategory = () => {
                     src={imageUrl}
                     alt={category.categoryName}
                     className="w-full h-full object-cover transition duration-300 ease-in-out hover:scale-110 rounded-lg"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src =
-                        "/placeholder-category.jpg";
-                    }}
+                    
                   />
                   <p className="absolute w-full py-2 text-lg font-bold text-center text-white bottom-5 backdrop-blur-lg">
                     {category.categoryName}
