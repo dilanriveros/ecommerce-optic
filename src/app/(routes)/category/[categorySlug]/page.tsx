@@ -36,13 +36,8 @@ const { result, loading }: ResponseType = useGetCategoryProduct(categorySlug ?? 
   <>
    
      <div className="flex justify-center mt-4 mb-6">
-  {(categorySlug === "lentes-de-contacto" || categorySlug === "monturas") && (
-    <ContactarFormula
-      category={result?.[0]?.category ?? { categoryName: categorySlug }}
-    />
-  )}
-</div>
-
+           <ContactarFormula category={result[0]?.category} />
+     </div>
        </>
 )}
       <Separator />
