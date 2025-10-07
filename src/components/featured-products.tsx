@@ -56,13 +56,12 @@ const FeaturedProducts = () => {
                             className="cursor-pointer w-full h-64"
                             onClick={() => router.push(`product/${slug}`)}
                           >
-                            <img
+                           <img
                               src={imageUrl}
                               alt={productName || "Producto destacado"}
-                              className="w-full h-64 object-contain"
+                              className="w-full h-64 object-cover rounded-md"
                               onError={(e) => {
-                                (e.target as HTMLImageElement).style.display =
-                                  "none";
+                                (e.target as HTMLImageElement).style.display = "none";
                               }}
                             />
                           </div>
