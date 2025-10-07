@@ -18,6 +18,7 @@ const { result, loading }: ResponseType = useGetCategoryProduct(categorySlug ?? 
 
   const [filterStyle, setFilterStyle] = useState('');
   const router = useRouter();
+console.log("category para ContactarFormula:", result?.[0]?.category ?? { categoryName: categorySlug });
 
   const filteredProducts =
     result != null && !loading &&
