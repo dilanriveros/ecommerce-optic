@@ -16,34 +16,37 @@ interface CarouselProductProps {
   }[];
 }
 
-const CarouselProduct = (props: CarouselProductProps) => {
-  const { images } = props;
-
-  // Verificar que `images` sea un array y no esté vacío
-  if (!Array.isArray(images)) {
-    return <div>No images available</div>; // Si no es un array, muestra un mensaje o un fallback
+const CarouselProduct = ({ images }: CarouselProductProps) => {
+  if (!Array.isArray(images) || images.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[300px] text-gray-400">
+        No hay imágenes disponibles
+      </div>
+    );
   }
 
   return (
-    <div className="sm:px-16">
+    <div className="relative max-w-xl mx-auto sm:px-10">
       <Carousel>
         <CarouselContent>
           {images.map((image) => (
             <CarouselItem key={image.id}>
-              <img
-                src={`${image.url}`}
-                alt={image.alternativeText ?? "Image product"}
-                className="rounded-lg"
-              />
+              <div className="flex items-center justify-center h-[320px] sm:h-[420px]">
+                <img
+                  src={image.url}
+                  alt={image.alternativeText ?? "Imagen del producto"}
+                  className="max-h-full object-contain rounded-lg"
+                />
+              </div>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+
+        <CarouselPrevious className="left-2 bg-black/60 text-white hover:bg-black" />
+        <CarouselNext className="right-2 bg-black/60 text-white hover:bg-black" />
       </Carousel>
     </div>
   );
 };
 
 export default CarouselProduct;
-

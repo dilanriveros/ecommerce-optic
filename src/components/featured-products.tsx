@@ -25,98 +25,102 @@ const FeaturedProducts = () => {
   const { addItem } = useCart();
 
   return (
-    <div className="max-w-6xl py-4 mx-auto sm:py-16 sm:px-24">
-      <h3 className="px-6 text-3xl sm:pb-8">Productos destacados</h3>
+    <section className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
+      <h3 className="mb-8 text-3xl font-bold">
+        Productos destacados
+      </h3>
+
       <Carousel>
         <CarouselContent className="-ml-2 md:-ml-4">
           {loading && <SkeletonSchema grid={3} />}
 
-          {result != null &&
+          {Array.isArray(result) &&
             result.map((product: ProductType) => {
-              const { id, slug, images, productName, style, categoryName } = product;
+              const {
+                id,
+                slug,
+                images,
+                productName,
+                style,
+                categoryName,
+              } = product;
 
-              // ✅ Corregir URL de la primera imagen
               const firstImage = images?.[0];
-              const imageUrl = firstImage
-                ? firstImage.url.startsWith("http")
-                  ? firstImage.url
-                  : `${firstImage.url}`
-                : null;
+              const imageUrl = firstImage?.url ?? null;
 
               return (
                 <CarouselItem
                   key={id}
-                  className="md:basis-1/2 lg:basis-1/3 group"
+                  className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3"
                 >
-                  <div className="p-1">
-                    <Card className="py-4 border-gray-200 shadow-none transition-shadow duration-300 group-hover:shadow-md">
-                      <CardContent className="relative flex items-center justify-center px-6 py-2">
+                  <Card className="group h-full border-gray-200 transition-shadow duration-300 hover:shadow-lg">
+                    <CardContent className="relative flex items-center justify-center p-6">
+                      <div
+                        className="relative w-full h-64 cursor-pointer"
+                        onClick={() => router.push(`/product/${slug}`)}
+                      >
                         {imageUrl ? (
-                          <div
-                            className="cursor-pointer w-full h-64"
-                            onClick={() => router.push(`product/${slug}`)}
-                          >
-                           <img
-                              src={imageUrl}
-                              alt={productName || "Producto destacado"}
-                              className="w-full h-64 object-cover rounded-md"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).style.display = "none";
-                              }}
-                            />
-                          </div>
+                          <img
+                            src={imageUrl}
+                            alt={productName || "Producto destacado"}
+                            className="w-full h-full object-cover rounded-md"
+                          />
                         ) : (
-                          <div className="w-full h-64 flex items-center justify-center bg-gray-100">
-                            <span className="text-gray-500">
+                          <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded-md">
+                            <span className="text-sm text-gray-500">
                               Imagen no disponible
                             </span>
                           </div>
                         )}
 
-                        {/* Botones flotantes */}
-                        <div className="absolute w-full px-6 transition duration-200 opacity-0 group-hover:opacity-100 bottom-5">
-                          <div className="flex justify-center gap-x-6">
-                            <IconButton
-                              onClick={() => router.push(`product/${slug}`)}
-                              icon={<Expand size={20} />}
-                              className="text-gray-600"
-                            />
-                            <IconButton
-                              onClick={() => addItem(product)}
-                              icon={<ShoppingCart size={20} />}
-                              className="text-gray-600"
-                            />
-                          </div>
-                        </div>
-                      </CardContent>
+                        {/* Overlay hover */}
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition" />
 
-                      {/* Nombre + etiquetas */}
-                      <div className="flex justify-between gap-4 px-8">
-                        <h3 className="text-lg font-bold">{productName}</h3>
-
-                        <div className="flex items-center justify-between gap-3">
-                          {style && (
-                            <p className="px-2 py-1 text-white bg-black rounded-full dark:bg-white dark:text-black w-fit">
-                              {style}
-                            </p>
-                          )}
-                          {categoryName && (
-                            <p className="px-2 py-1 text-white bg-yellow-900 rounded-full w-fit">
-                              {categoryName}
-                            </p>
-                          )}
+                        {/* Botones */}
+                        <div className="absolute inset-x-0 bottom-4 flex justify-center gap-6 opacity-0 group-hover:opacity-100 transition">
+                          <IconButton
+                            onClick={() => router.push(`/product/${slug}`)}
+                            icon={<Expand size={20} />}
+                            className="bg-white text-black shadow"
+                          />
+                          <IconButton
+                            onClick={() => addItem(product)}
+                            icon={<ShoppingCart size={20} />}
+                            className="bg-white text-black shadow"
+                          />
                         </div>
                       </div>
-                    </Card>
-                  </div>
+                    </CardContent>
+
+                    {/* Info producto */}
+                    <div className="px-6 pb-6 space-y-3">
+                      <h3 className="text-lg font-semibold line-clamp-1">
+                        {productName}
+                      </h3>
+
+                      <div className="flex flex-wrap gap-2">
+                        {style && (
+                          <span className="px-3 py-1 text-xs font-medium text-white bg-black rounded-full dark:bg-white dark:text-black">
+                            {style}
+                          </span>
+                        )}
+                        {categoryName && (
+                          <span className="px-3 py-1 text-xs font-medium text-white bg-yellow-900 rounded-full">
+                            {categoryName}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
                 </CarouselItem>
               );
             })}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext className="hidden sm:flex" />
+
+        <CarouselPrevious className="-left-3" />
+        <CarouselNext className="-right-3 hidden sm:flex" />
       </Carousel>
-    </div>
+    </section>
   );
 };
 

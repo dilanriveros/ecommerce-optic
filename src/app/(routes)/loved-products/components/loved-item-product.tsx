@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/navigation";
 import { ProductType } from "../../../../../types/product";
 import { useLovedProducts } from "../../../../../hooks/use-loved-products";
@@ -7,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 
-interface lovedItemProductProps {
+interface LovedItemProductProps {
   product: ProductType;
 }
 
-const LovedItemProduct = ({ product }: lovedItemProductProps) => {
+const LovedItemProduct = ({ product }: LovedItemProductProps) => {
   const router = useRouter();
   const { removeLovedItem } = useLovedProducts();
   const { addItem } = useCart();
@@ -21,24 +22,29 @@ const LovedItemProduct = ({ product }: lovedItemProductProps) => {
     removeLovedItem(product.id);
   };
 
-  const isAccessory = product.category?.slug === "accesorios"; // Cambia el slug si es diferente
+  const isAccessory = product.category?.slug === "accesorios";
+  const imageUrl = product.images?.[0]?.url || "/placeholder.png";
 
   return (
     <li className="flex py-6 border-b">
-      <div onClick={() => router.push(`/product/${product.slug}`)}>
+      <div
+        onClick={() => router.push(`/product/${product.slug}`)}
+        className="cursor-pointer"
+      >
         <img
-          src={`${product.images[0]?.url}`}
-          alt="Product"
+          src={imageUrl}
+          alt={product.productName}
           className="w-24 h-24 overflow-hidden rounded-md sm:w-auto sm:h-32"
         />
       </div>
+
       <div className="flex justify-between flex-1 px-6">
         <div>
           <h2 className="text-lg font-bold">{product.productName}</h2>
           <p className="font-bold">{formatPrice(product.price)}</p>
 
           {!isAccessory && (
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
               <p className="px-2 py-1 text-xs text-white bg-yellow-900 rounded-full w-fit">
                 {product.style}
               </p>
@@ -55,12 +61,9 @@ const LovedItemProduct = ({ product }: lovedItemProductProps) => {
             className={cn(
               "rounded-full flex items-center justify-center bg-white border shadow-md p-1 hover:scale-110 transition"
             )}
+            onClick={() => removeLovedItem(product.id)}
           >
-            <X
-              size={20}
-              className="text-black dark:text-black"
-              onClick={() => removeLovedItem(product.id)}
-            />
+            <X size={20} className="text-black" />
           </button>
         </div>
       </div>

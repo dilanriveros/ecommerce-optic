@@ -10,38 +10,48 @@ const ChooseCategory = () => {
   const { result, loading }: ResponseType = useGetCategories();
 
   return (
-    <div className="max-w-6xl py-4 mx-auto sm:py-16 sm:px-24">
-      <h3 className="px-6 pb-4 text-3xl sm:pb-8">Elige una categoría</h3>
-      <div className="grid gap-5 sm:grid-cols-3">
+    <section className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
+      <h3 className="mb-8 text-3xl font-bold text-center sm:text-left">
+        Elige una categoría
+      </h3>
+
+      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
         {!loading &&
           Array.isArray(result) &&
           (result as CategoryType[])
-            .filter((category) => category.categoryName.toLowerCase() !== "accesorios")
+            .filter(
+              (category) =>
+                category.categoryName.toLowerCase() !== "accesorios"
+            )
             .map((category) => {
               const imageUrl = category?.mainImage?.url
-                ? `${category.mainImage.url}`
+                ? category.mainImage.url
                 : "/placeholder-category.jpg";
 
               return (
                 <Link
                   key={category.id}
                   href={`/category/${category.slug}`}
-                  className="relative mx-auto w-full max-w-[280px] h-[340px] sm:h-[400px] overflow-hidden rounded-lg bg-no-repeat bg-cover"
+                  className="group relative h-[260px] sm:h-[360px] overflow-hidden rounded-xl shadow-md"
                 >
                   <img
                     src={imageUrl}
                     alt={category.categoryName}
-                    className="w-full h-full object-cover transition duration-300 ease-in-out hover:scale-110 rounded-lg"
-                    
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <p className="absolute w-full py-2 text-lg font-bold text-center text-white bottom-5 backdrop-blur-lg">
+
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black/35 group-hover:bg-black/45 transition" />
+
+                  {/* Texto */}
+                  <p className="absolute bottom-4 left-0 right-0 text-center text-lg font-semibold text-white tracking-wide">
                     {category.categoryName}
                   </p>
                 </Link>
               );
             })}
       </div>
-    </div>
+    </section>
   );
 };
 
