@@ -19,7 +19,7 @@ const ChooseCategory = () => {
             .filter((category) => category.categoryName.toLowerCase() !== "accesorios")
             .map((category) => {
               const imageUrl = category?.mainImage?.url
-                ? `${process.env.NEXT_PUBLIC_BACKEND_URL}${category.mainImage.url}`
+                ? `${category.mainImage.url}`
                 : "/placeholder-category.jpg";
 
               return (

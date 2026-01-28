@@ -35,7 +35,7 @@ const AccessoriesProductCard = ({ product }: AccessoriesProductCardProps) => {
             <CarouselItem key={image.id} className="group relative">
               <div className="w-full h-[250px] flex items-center justify-center overflow-hidden rounded-xl">
                 <img
-                  src={`${process.env.NEXT_PUBLIC_BACKEND_URL}${image.url}`}
+                  src={`${image.url}`}
                   alt={product.productName}
                   className="object-contain max-h-full max-w-full transition-transform duration-300 group-hover:scale-105"
                 />

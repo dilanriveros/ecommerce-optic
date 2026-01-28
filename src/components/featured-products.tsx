@@ -40,7 +40,7 @@ const FeaturedProducts = () => {
               const imageUrl = firstImage
                 ? firstImage.url.startsWith("http")
                   ? firstImage.url
-                  : `${process.env.NEXT_PUBLIC_BACKEND_URL}${firstImage.url}`
+                  : `${firstImage.url}`
                 : null;
 
               return (
