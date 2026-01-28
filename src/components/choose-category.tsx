@@ -25,7 +25,9 @@ const ChooseCategory = () => {
             )
             .map((category) => {
               const imageUrl = category?.mainImage?.url
-                ? category.mainImage.url
+                ? category.mainImage.url.startsWith("http")
+                  ? category.mainImage.url
+                  : `${process.env.NEXT_PUBLIC_BACKEND_URL}${category.mainImage.url}`
                 : "/placeholder-category.jpg";
 
               return (
@@ -38,6 +40,10 @@ const ChooseCategory = () => {
                     src={imageUrl}
                     alt={category.categoryName}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src =
+                        "/placeholder-category.jpg";
+                    }}
                   />
 
                   {/* Overlay */}
