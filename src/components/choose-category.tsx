@@ -24,10 +24,11 @@ const ChooseCategory = () => {
                 category.categoryName.toLowerCase() !== "accesorios"
             )
             .map((category) => {
-              const imageUrl =
-                category?.mainImage?.data?.attributes?.url
-                  ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${category.mainImage.data.attributes.url}`
-                  : "/placeholder-category.jpg";
+              const imageUrl = category?.mainImage?.url
+                ? category.mainImage.url.startsWith("http")
+                  ? category.mainImage.url
+                  : `${process.env.NEXT_PUBLIC_STRAPI_API_URL}${category.mainImage.url}`
+                : "/placeholder-category.jpg";
 
               return (
                 <Link
