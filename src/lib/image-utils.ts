@@ -1,66 +1,21 @@
-// lib/image-utils.ts
-export const getStrapiMedia = (media: any): string => {
-  // Si no hay media, devuelve placeholder
-  if (!media) return '/placeholder.jpg';
+// lib/image-utils-simple.ts
+export const getCategoryImageUrl = (mainImage: any, preferThumbnail: boolean = true): string => {
+  if (!mainImage) return '/placeholder-category.jpg';
   
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || '';
+  // Si mainImage es un string (error)
+  if (typeof mainImage === 'string') {
+    console.error('⚠️ mainImage es string en lugar de objeto:', mainImage);
+    return '/placeholder-category.jpg';
+  }
   
-  // CASO 1: Si es un objeto con propiedad 'url' (estructura Strapi)
-  if (media && typeof media === 'object' && media.url) {
-    const url = media.url;
-    
-    // URL absoluta (Cloudinary)
-    if (url.startsWith('http')) return url;
-    
-    // URL Cloudinary sin protocolo
-    if (url.startsWith('//')) return `https:${url}`;
-    
-    // URL relativa (uploads)
-    if (BACKEND_URL) {
-      return `${BACKEND_URL}${url.startsWith('/') ? url : `/${url}`}`;
+  // Si es objeto con URL de Cloudinary
+  if (mainImage.url && mainImage.url.startsWith('http')) {
+    // Preferir thumbnail para mejor performance
+    if (preferThumbnail && mainImage.formats?.thumbnail?.url) {
+      return mainImage.formats.thumbnail.url;
     }
-    
-    return url;
+    return mainImage.url;
   }
   
-  // CASO 2: Si es string (URL directa)
-  if (typeof media === 'string') {
-    const url = media;
-    
-    if (url.startsWith('http')) return url;
-    if (url.startsWith('//')) return `https:${url}`;
-    
-    if (BACKEND_URL) {
-      return `${BACKEND_URL}${url.startsWith('/') ? url : `/${url}`}`;
-    }
-    
-    return url;
-  }
-  
-  // CASO 3: Si tiene formats (priorizar thumbnail o medium)
-  if (media.formats) {
-    // Intentar obtener thumbnail, small, medium, large (en ese orden)
-    const format = media.formats.thumbnail || 
-                   media.formats.small || 
-                   media.formats.medium || 
-                   media.formats.large || 
-                   media;
-    
-    // Llamada recursiva
-    return getStrapiMedia(format);
-  }
-  
-  return '/placeholder.jpg';
-};
-
-// Helper adicional para debug
-export const debugMedia = (media: any): void => {
-  console.log('DEBUG MEDIA:', {
-    raw: media,
-    type: typeof media,
-    hasUrl: media?.url ? 'SI' : 'NO',
-    urlType: typeof media?.url,
-    urlValue: media?.url,
-    formats: media?.formats ? Object.keys(media.formats) : 'NO'
-  });
+  return '/placeholder-category.jpg';
 };
