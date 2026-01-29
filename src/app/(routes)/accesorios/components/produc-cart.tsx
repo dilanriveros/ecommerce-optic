@@ -6,7 +6,7 @@ import { Expand, ShoppingCart } from "lucide-react";
 import { formatPrice } from "@/lib/formatPrice";
 import { useCart } from "../../../../../hooks/use-cart";
 import { ProductType } from "../../../../../types/product";
-import { useState, useEffect } from "react";
+import { useState } from "react"; // Añade esto
 
 type AccessoriesProductCardProps = {
   product: ProductType;
@@ -15,7 +15,7 @@ type AccessoriesProductCardProps = {
 const AccessoriesProductCard = ({ product }: AccessoriesProductCardProps) => {
   const router = useRouter();
   const { addItem } = useCart();
-  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
 
   const handleCardClick = () => {
     router.push(`/product/${product.slug}`);
@@ -25,54 +25,35 @@ const AccessoriesProductCard = ({ product }: AccessoriesProductCardProps) => {
     e.stopPropagation();
   };
 
-  // DEBUG: Ver qué llega realmente
-  useEffect(() => {
-    console.log("🔥 ACCESSORIES DEBUG:", {
-      productName: product.productName,
-      imagesCount: product.images?.length || 0,
-      images: product.images,
-      primeraImagen: product.images?.[0],
-      urlPrimeraImagen: product.images?.[0]?.url,
-      tipoUrl: typeof product.images?.[0]?.url,
-      esCloudinary: product.images?.[0]?.url?.includes('cloudinary')
-    });
-  }, [product]);
-
-  // Helper para obtener URL segura
-  const getSafeImageUrl = (url: string, imageId: number): string => {
+  // FUNCIÓN CRÍTICA: Convierte cualquier URL a absoluta
+  const getAbsoluteUrl = (url: string): string => {
     if (!url) return '/placeholder.jpg';
     
-    // Si ya es URL completa
-    if (url.startsWith('http')) return url;
+    // Si ya es URL completa (http://, https://, //)
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('//')) {
+      // Si empieza con //, añade https:
+      return url.startsWith('//') ? `https:${url}` : url;
+    }
     
-    // Si es relativa, añadir backend
+    // Si es ruta relativa (/uploads/...)
     if (url.startsWith('/')) {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-      return backendUrl ? `${backendUrl}${url}` : url;
+      const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://backend-ecommerce-optica.onrender.com';
+      return `${BACKEND_URL}${url}`;
     }
     
     return url;
   };
 
-  // Si no hay imágenes
-  if (!product.images || product.images.length === 0) {
-    return (
-      <div
-        onClick={handleCardClick}
-        className="relative p-3 transition-all duration-200 rounded-2xl hover:shadow-md cursor-pointer border border-zinc-200 dark:border-zinc-700"
-      >
-        <div className="w-full h-[250px] flex items-center justify-center bg-gray-100 rounded-xl">
-          <span className="text-gray-500">Sin imágenes</span>
-        </div>
-        <p className="text-lg font-semibold text-center mt-4 text-zinc-800 dark:text-zinc-100 line-clamp-2">
-          {product.productName}
-        </p>
-        <p className="font-bold text-center text-zinc-900 dark:text-white">
-          {formatPrice(product.price)}
-        </p>
-      </div>
-    );
-  }
+  // Debug: Ver qué imágenes llegan
+  console.log(`🛠️ AccessoriesProductCard - ${product.productName}:`, {
+    imagesCount: product.images?.length,
+    images: product.images?.map(img => ({
+      url: img.url,
+      tipo: typeof img.url,
+      esRelativa: !img.url?.startsWith('http'),
+      procesada: getAbsoluteUrl(img.url)
+    }))
+  });
 
   return (
     <div
@@ -82,32 +63,33 @@ const AccessoriesProductCard = ({ product }: AccessoriesProductCardProps) => {
       <Carousel opts={{ align: "start" }} className="w-full max-w-sm">
         <CarouselContent>
           {product.images.map((image, index) => {
-            const safeUrl = getSafeImageUrl(image.url, image.id || index);
-            const hasError = imageErrors.has(image.id || index);
-            
+            const imageUrl = getAbsoluteUrl(image.url);
+            const imageKey = image.id || index;
+            const hasFailed = failedImages.has(imageKey);
+
             return (
-              <CarouselItem key={image.id ?? image.url} className="group relative">
+              <CarouselItem key={imageKey} className="group relative">
                 <div className="w-full h-[250px] flex items-center justify-center overflow-hidden rounded-xl">
-                  {!hasError ? (
+                  {!hasFailed ? (
                     <img
-                      src={safeUrl}
+                      src={imageUrl}
                       alt={`${product.productName} - Imagen ${index + 1}`}
                       className="object-contain max-h-full max-w-full transition-transform duration-300 group-hover:scale-105"
+                      onLoad={() => console.log(`✅ ${product.productName} - Imagen ${index} cargada`)}
                       onError={(e) => {
-                        console.error(`❌ Error imagen ${index}:`, {
+                        console.error(`❌ ${product.productName} - Error imagen ${index}:`, {
                           urlOriginal: image.url,
-                          urlProcesada: safeUrl,
-                          product: product.productName,
-                          imageId: image.id
+                          urlProcesada: imageUrl,
+                          esCloudinary: imageUrl.includes('cloudinary'),
+                          esLocal: imageUrl.includes('/uploads/')
                         });
-                        setImageErrors(prev => new Set(prev).add(image.id || index));
+                        setFailedImages(prev => new Set([...prev, imageKey]));
                         e.currentTarget.src = '/placeholder.jpg';
                       }}
-                      onLoad={() => console.log(`✅ Imagen ${index} cargada:`, product.productName)}
                     />
                   ) : (
                     <div className="flex items-center justify-center w-full h-full bg-gray-100">
-                      <span className="text-gray-500">Error de imagen</span>
+                      <span className="text-gray-500 text-sm">Imagen no disponible</span>
                     </div>
                   )}
 
