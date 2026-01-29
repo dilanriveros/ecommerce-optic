@@ -5,12 +5,10 @@ import Link from "next/link";
 import { useGetCategories } from "@/api/getProducts";
 import { ResponseType } from "../../types/response";
 import { CategoryType } from "../../types/category";
-
+import { getStrapiMedia, debugMedia } from "@/lib/image-utils"; // ← IMPORTA AQUÍ
 
 const ChooseCategory = () => {
   const { result, loading }: ResponseType = useGetCategories();
-
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
@@ -27,12 +25,11 @@ const ChooseCategory = () => {
                 category.categoryName?.toLowerCase() !== "accesorios"
             )
             .map((category) => {
-              // 🔍 Debug (puedes borrar luego)
-              console.log("CATEGORY IMAGE:", category.mainImage?.url);
-
-              const imageUrl = category?.mainImage?.url
-                ? `${BACKEND_URL}${category.mainImage.url}`
-                : "/placeholder-category.jpg";
+              // DEBUG: Ver qué viene exactamente
+              debugMedia(category.mainImage);
+              
+              // Obtiene la URL procesada
+              const imageUrl = getStrapiMedia(category.mainImage);
 
               return (
                 <Link
@@ -44,6 +41,14 @@ const ChooseCategory = () => {
                     src={imageUrl}
                     alt={category.categoryName}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    onError={(e) => {
+                      console.error("❌ Image failed to load:", {
+                        url: imageUrl,
+                        category: category.categoryName,
+                        rawMedia: category.mainImage
+                      });
+                      e.currentTarget.src = "/placeholder-category.jpg";
+                    }}
                   />
 
                   {/* Overlay */}
