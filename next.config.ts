@@ -1,14 +1,22 @@
 import type { NextConfig } from "next";
 
-// Configuración de Next.js
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost:3000"]
-    }
-  }
+      allowedOrigins: ["localhost:3000"],
+    },
+  },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
