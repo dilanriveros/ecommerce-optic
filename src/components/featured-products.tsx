@@ -50,9 +50,7 @@ const ChooseCategory = () => {
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition" />
 
                   {/* Texto */}
-                  <p className="absolute bottom-4 left-0 right-0 text-center text-lg font-semibold text-white tracking-wide">
-                    
-                  </p>
+                 
                 </Link>
               );
             })}
