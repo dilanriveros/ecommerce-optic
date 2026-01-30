@@ -1,127 +1,64 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { useGetFeaturedProducts } from "@/api/getFeaturedProducts";
+import Link from "next/link";
+import { useGetCategories } from "@/api/getProducts";
 import { ResponseType } from "../../types/response";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "./ui/carousel";
-import SkeletonSchema from "./skeletonSchema";
-import { Card, CardContent } from "./ui/card";
-import { ProductType } from "../../types/product";
-import { useRouter } from "next/navigation";
-import { Expand, ShoppingCart } from "lucide-react";
-import IconButton from "./icon-button";
-import { useCart } from "../../hooks/use-cart";
+import { CategoryType } from "../../types/category";
 
-const FeaturedProducts = () => {
-  const router = useRouter();
-  const { loading, result }: ResponseType = useGetFeaturedProducts();
-  const { addItem } = useCart();
+
+const ChooseCategory = () => {
+  const { result, loading }: ResponseType = useGetCategories();
+
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
-      <h3 className="mb-8 text-3xl font-bold">
-        Productos destacados
+      <h3 className="mb-8 text-3xl font-bold text-center sm:text-left">
+        Elige una categoría
       </h3>
 
-      <Carousel>
-        <CarouselContent className="-ml-2 md:-ml-4">
-          {loading && <SkeletonSchema grid={3} />}
+      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
+        {!loading &&
+          Array.isArray(result) &&
+          (result as CategoryType[])
+            .filter(
+              (category) =>
+                category.categoryName?.toLowerCase() !== "accesorios"
+            )
+            .map((category) => {
+              // 🔍 Debug (puedes borrar luego)
+              console.log("CATEGORY IMAGE:", category.mainImage?.url);
 
-          {Array.isArray(result) &&
-            result.map((product: ProductType) => {
-              const {
-                id,
-                slug,
-                images,
-                productName,
-                style,
-                categoryName,
-              } = product;
-
-              const firstImage = images?.[0];
-              const imageUrl = firstImage?.url ?? null;
+              const imageUrl = category?.mainImage?.url
+                ? `${BACKEND_URL}${category.mainImage.url}`
+                : "/placeholder-category.jpg";
 
               return (
-                <CarouselItem
-                  key={id}
-                  className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3"
+                <Link
+                  key={category.id}
+                  href={`/category/${category.slug}`}
+                  className="group relative h-[260px] sm:h-[360px] overflow-hidden rounded-xl shadow-md"
                 >
-                  <Card className="group h-full border-gray-200 transition-shadow duration-300 hover:shadow-lg">
-                    <CardContent className="relative flex items-center justify-center p-6">
-                      <div
-                        className="relative w-full h-64 cursor-pointer"
-                        onClick={() => router.push(`/product/${slug}`)}
-                      >
-                        {imageUrl ? (
-                          <img
-                            src={imageUrl}
-                            alt={productName || "Producto destacado"}
-                            className="w-full h-full object-cover rounded-md"
-                          />
-                        ) : (
-                          <div className="flex items-center justify-center w-full h-full bg-gray-100 rounded-md">
-                            <span className="text-sm text-gray-500">
-                              Imagen no disponible
-                            </span>
-                          </div>
-                        )}
+                  <img
+                    src={imageUrl}
+                    alt={category.categoryName}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
 
-                        {/* Overlay hover */}
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition" />
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition" />
 
-                        {/* Botones */}
-                        <div className="absolute inset-x-0 bottom-4 flex justify-center gap-6 opacity-0 group-hover:opacity-100 transition">
-                          <IconButton
-                            onClick={() => router.push(`/product/${slug}`)}
-                            icon={<Expand size={20} />}
-                            className="bg-white text-black shadow"
-                          />
-                          <IconButton
-                            onClick={() => addItem(product)}
-                            icon={<ShoppingCart size={20} />}
-                            className="bg-white text-black shadow"
-                          />
-                        </div>
-                      </div>
-                    </CardContent>
-
-                    {/* Info producto */}
-                    <div className="px-6 pb-6 space-y-3">
-                      <h3 className="text-lg font-semibold line-clamp-1">
-                        {productName}
-                      </h3>
-
-                      <div className="flex flex-wrap gap-2">
-                        {style && (
-                          <span className="px-3 py-1 text-xs font-medium text-white bg-black rounded-full dark:bg-white dark:text-black">
-                            {style}
-                          </span>
-                        )}
-                        {categoryName && (
-                          <span className="px-3 py-1 text-xs font-medium text-white bg-yellow-900 rounded-full">
-                            {categoryName}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </Card>
-                </CarouselItem>
+                  {/* Texto */}
+                  <p className="absolute bottom-4 left-0 right-0 text-center text-lg font-semibold text-white tracking-wide">
+                    {category.categoryName}
+                  </p>
+                </Link>
               );
             })}
-        </CarouselContent>
-
-        <CarouselPrevious className="-left-3" />
-        <CarouselNext className="-right-3 hidden sm:flex" />
-      </Carousel>
+      </div>
     </section>
   );
 };
 
-export default FeaturedProducts;
+export default ChooseCategory;
