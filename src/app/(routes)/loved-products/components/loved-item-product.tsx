@@ -23,7 +23,23 @@ const LovedItemProduct = ({ product }: LovedItemProductProps) => {
   };
 
   const isAccessory = product.category?.slug === "accesorios";
-  const imageUrl = product.images?.[0]?.url || "/placeholder.png";
+  
+  // SOLUCIÓN AQUÍ ↓
+  const rawUrl = product.images?.[0]?.url;
+  let imageUrl = "/placeholder.png";
+  
+  if (rawUrl) {
+    if (rawUrl.startsWith('/')) {
+      // URL relativa → añadir backend
+      imageUrl = `https://backend-ecommerce-optica.onrender.com${rawUrl}`;
+    } else if (rawUrl.startsWith('//')) {
+      // Cloudinary sin protocolo → añadir https:
+      imageUrl = `https:${rawUrl}`;
+    } else {
+      // URL absoluta (Cloudinary) → usar tal cual
+      imageUrl = rawUrl;
+    }
+  }
 
   return (
     <li className="flex py-6 border-b">
@@ -35,6 +51,14 @@ const LovedItemProduct = ({ product }: LovedItemProductProps) => {
           src={imageUrl}
           alt={product.productName}
           className="w-24 h-24 overflow-hidden rounded-md sm:w-auto sm:h-32"
+          onError={(e) => {
+            console.error("❌ Error imagen LovedItem:", {
+              url: imageUrl,
+              raw: rawUrl,
+              product: product.productName
+            });
+            e.currentTarget.src = "/placeholder.png";
+          }}
         />
       </div>
 
