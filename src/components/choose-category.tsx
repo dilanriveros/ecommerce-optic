@@ -9,8 +9,8 @@ import { CategoryType } from "../../types/category";
 const ChooseCategory = () => {
   const { result, loading }: ResponseType = useGetCategories();
 
-  // SOLUCIÓN: Convertir result a array de CategoryType
-  const categories = Array.isArray(result) ? (result as CategoryType[]) : [];
+  // Si result no es array, usar array vacío
+  const categories = Array.isArray(result) ? result : [];
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
@@ -19,13 +19,28 @@ const ChooseCategory = () => {
       </h3>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-        {!loading &&
+        {loading ? (
+          // Mostrar skeletons mientras carga
+          Array.from({ length: 6 }).map((_, index) => (
+            <div
+              key={index}
+              className="
+                w-full 
+                h-[380px] 
+                sm:h-[460px] 
+                bg-gray-200 
+                rounded-xl 
+                animate-pulse
+              "
+            />
+          ))
+        ) : categories.length > 0 ? (
           categories
             .filter(
-              (category) =>
-                category.categoryName.toLowerCase() !== "accesorios"
+              (category: CategoryType) =>
+                category?.categoryName?.toLowerCase() !== "accesorios"
             )
-            .map((category) => {
+            .map((category: CategoryType) => {
               const imageUrl = category?.mainImage?.url
                 ? category.mainImage.url
                 : "/placeholder-category.jpg";
@@ -78,7 +93,13 @@ const ChooseCategory = () => {
                   </p>
                 </Link>
               );
-            })}
+            })
+        ) : (
+          // Mostrar mensaje si no hay categorías
+          <div className="col-span-3 text-center py-10">
+            <p className="text-gray-500">No hay categorías disponibles</p>
+          </div>
+        )}
       </div>
     </section>
   );
