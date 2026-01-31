@@ -1,64 +1,134 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import Link from "next/link";
-import { useGetCategories } from "@/api/getProducts";
-import { ResponseType } from "../../types/response";
-import { CategoryType } from "../../types/category";
+import { useGetFeaturedProducts } from "@/api/getFeaturedProducts";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./ui/carousel";
+import SkeletonSchema from "./skeletonSchema";
+import { Card, CardContent } from "./ui/card";
+import { ProductType } from "../../types/product";
+import { useRouter } from "next/navigation";
+import { Expand, ShoppingCart } from "lucide-react";
+import IconButton from "./icon-button";
+import { useCart } from "../../hooks/use-cart";
 
-
-const ChooseCategory = () => {
-  const { result, loading }: ResponseType = useGetCategories();
-
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const FeaturedProducts = () => {
+  const router = useRouter();
+  const { loading, result } = useGetFeaturedProducts();
+  const { addItem } = useCart();
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
-      <h3 className="mb-8 text-3xl font-bold text-center sm:text-left">
-        Elige una categoría pene
+    <section className="max-w-6xl mx-auto px-4 py-12">
+      <h3 className="mb-8 text-3xl font-bold text-center">
+        Productos destacados
       </h3>
 
-      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
-        {!loading &&
-          Array.isArray(result) &&
-          (result as CategoryType[])
-            .filter(
-              (category) =>
-                category.categoryName?.toLowerCase() !== "accesorios"
-            )
-            .map((category) => {
-              // 🔍 Debug (puedes borrar luego)
-              console.log("CATEGORY IMAGE:", category.mainImage?.url);
+      <Carousel>
+        <CarouselContent className="-ml-3 gap-x-3 lg:justify-center">
+          {loading && <SkeletonSchema grid={3} />}
 
-              const imageUrl = category?.mainImage?.url
-                ? `${BACKEND_URL}${category.mainImage.url}`
-                : "/placeholder-category.jpg";
+          {Array.isArray(result) &&
+            result.map((product: ProductType) => {
+              const { id, slug, images, productName, style, categoryName } =
+                product;
+
+              const imageUrl = images?.[0]?.url ?? null;
 
               return (
-                <Link
-                  key={category.id}
-                  href={`/category/${category.slug}`}
-                  className="group relative h-[260px] sm:h-[360px] overflow-hidden rounded-xl shadow-md"
+                <CarouselItem
+                  key={id}
+                  className="
+                    pl-3
+                    basis-full          /* MÓVIL: NO SE TOCA */
+                    sm:basis-[50%]
+                    lg:basis-[26%]      /* DESKTOP: tamaño original */
+                  "
                 >
-                  <img
-                    src={imageUrl}
-                    alt={category.categoryName}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
+                  <Card className="group border-gray-200">
+                    <CardContent className="p-4">
+                      {/* CUADRADO (MISMO TAMAÑO DE SIEMPRE) */}
+                      <div
+                        onClick={() => router.push(`/product/${slug}`)}
+                        className="
+                          relative
+                          w-full
+                          aspect-square
+                          rounded-xl
+                          bg-black/5
+                          flex
+                          items-center
+                          justify-center
+                          overflow-hidden
+                          cursor-pointer
+                        "
+                      >
+                        {imageUrl && (
+                          <img
+                            src={imageUrl}
+                            alt={productName}
+                            className="
+                              w-[90%]
+                              h-[90%]
+                              object-contain
+                              transition-transform
+                              duration-300
+                              group-hover:scale-105
+                            "
+                          />
+                        )}
 
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition" />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition" />
 
-                  {/* Texto */}
-                  <p className="absolute bottom-4 left-0 right-0 text-center text-lg font-semibold text-white tracking-wide">
-                    {category.categoryName}
-                  </p>
-                </Link>
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4 opacity-0 group-hover:opacity-100 transition">
+                          <IconButton
+                            onClick={() => router.push(`/product/${slug}`)}
+                            icon={<Expand size={18} />}
+                            className="bg-white text-black shadow"
+                          />
+                          <IconButton
+                            onClick={() => addItem(product)}
+                            icon={<ShoppingCart size={18} />}
+                            className="bg-white text-black shadow"
+                          />
+                        </div>
+                      </div>
+
+                      {/* INFO */}
+                      <div className="pt-4 space-y-2">
+                        <h3 className="text-base font-semibold line-clamp-1">
+                          {productName}
+                        </h3>
+
+                        <div className="flex flex-wrap gap-2">
+                          {style && (
+                            <span className="px-3 py-1 text-xs text-white bg-black rounded-full">
+                              {style}
+                            </span>
+                          )}
+                          {categoryName && (
+                            <span className="px-3 py-1 text-xs text-white bg-yellow-900 rounded-full">
+                              {categoryName}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
               );
             })}
-      </div>
+        </CarouselContent>
+
+        <CarouselPrevious className="-left-4" />
+        <CarouselNext className="-right-4 hidden sm:flex" />
+      </Carousel>
     </section>
   );
 };
 
-export default ChooseCategory;
+export default FeaturedProducts;
