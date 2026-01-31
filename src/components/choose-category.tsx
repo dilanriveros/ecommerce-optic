@@ -9,6 +9,9 @@ import { CategoryType } from "../../types/category";
 const ChooseCategory = () => {
   const { result, loading }: ResponseType = useGetCategories();
 
+  // SOLUCIÓN: Convertir result a array de CategoryType
+  const categories = Array.isArray(result) ? (result as CategoryType[]) : [];
+
   return (
     <section className="max-w-7xl mx-auto px-4 py-10 sm:py-16">
       <h3 className="mb-8 text-3xl font-bold text-center sm:text-left">
@@ -17,8 +20,7 @@ const ChooseCategory = () => {
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         {!loading &&
-          Array.isArray(result) &&
-          (result as CategoryType[])
+          categories
             .filter(
               (category) =>
                 category.categoryName.toLowerCase() !== "accesorios"
